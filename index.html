@@ -15,27 +15,27 @@
       content="오늘의 지혜, 하루 한 문장, 묵상, 마음정리, 영감 문장"
     />
     <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://yourdomain.com/" />
+    <link rel="canonical" href="https://wisdom.funnyfunny.cloud/" />
 
     <!-- Open Graph (og-image text MUST be English) -->
     <meta property="og:title" content="Daily Wisdom" />
     <meta
       property="og:description"
-      content="One short sentence inspired by biblical messages—written in modern Korean."
+      content="성경 메시지에서 영감을 받은 하루 한 문장, 현대 한국어로 전합니다."
     />
     <meta
       property="og:image"
       content="https://dummyimage.com/1200x630/0b1220/ffffff&text=Daily+Wisdom"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://yourdomain.com/" />
+    <meta property="og:url" content="https://wisdom.funnyfunny.cloud/" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Daily Wisdom" />
     <meta
       name="twitter:description"
-      content="One short sentence a day, inspired by biblical messages."
+      content="성경 메시지에서 영감을 받은 하루 한 문장, 현대 한국어로 전합니다."
     />
     <meta
       name="twitter:image"
@@ -97,23 +97,47 @@
               </span>
             </div>
           </div>
-          <button
-            id="copyTodayBtn"
-            class="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-4 h-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
+          <div class="shrink-0 flex flex-col gap-2">
+            <button
+              id="copyTodayBtn"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
             >
-              <path d="M8 4h10a2 2 0 0 1 2 2v10"></path>
-              <rect x="4" y="8" width="14" height="14" rx="2"></rect>
-            </svg>
-            복사
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M8 4h10a2 2 0 0 1 2 2v10"></path>
+                <rect x="4" y="8" width="14" height="14" rx="2"></rect>
+              </svg>
+              복사
+            </button>
+            <button
+              id="shareTodayBtn"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="5" r="3"></circle>
+                <circle cx="5" cy="19" r="3"></circle>
+                <circle cx="19" cy="19" r="3"></circle>
+                <path d="M8.59 17.51 15.42 13M8.59 6.49l6.83 4.02"></path>
+              </svg>
+              공유하기
+            </button>
+            <p class="text-xs text-white/50 leading-snug">
+              공유 시 오늘의 문장과 서비스 링크, 출처가 함께 전달됩니다.
+            </p>
+          </div>
         </div>
 
         <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -386,6 +410,8 @@
       let filtered = [...ALL];
       let page = 1;
       const pageSize = 20;
+      let todayItem = null;
+      const shareBtnDefaultHtml = $("shareTodayBtn").innerHTML;
 
       function renderThemes() {
         const sel = $("theme");
@@ -405,6 +431,7 @@
           : dailyIndex(now, ALL.length);
         const item = ALL[idx];
 
+        todayItem = item;
         $("todayText").textContent = item.text;
         $("todayTheme").textContent = `테마: ${item.theme}`;
         $("todayDate").textContent = formatDateK(now);
@@ -424,6 +451,31 @@
             }, 900);
           }
         };
+      }
+
+      async function shareToday() {
+        if (!todayItem) return;
+        const btn = $("shareTodayBtn");
+        const message = `${todayItem.text}\n\n오늘의 지혜에서 더 보기: https://wisdom.funnyfunny.cloud/\n출처: 오늘의 지혜`;
+        try {
+          if (navigator.share) {
+            await navigator.share({
+              title: "오늘의 지혜",
+              text: message,
+              url: "https://wisdom.funnyfunny.cloud/",
+            });
+            btn.textContent = "공유됨";
+          } else {
+            await copyText(message);
+            btn.textContent = "링크 복사됨";
+          }
+        } catch (_) {
+          await copyText(message);
+          btn.textContent = "링크 복사됨";
+        }
+        setTimeout(() => {
+          btn.innerHTML = shareBtnDefaultHtml;
+        }, 1000);
       }
 
       function applyFilter() {
@@ -535,6 +587,7 @@
 
       $("shuffleBtn").addEventListener("click", () => setToday(true));
       $("downloadBtn").addEventListener("click", downloadTxt);
+      $("shareTodayBtn").addEventListener("click", shareToday);
     </script>
   </body>
 </html>
