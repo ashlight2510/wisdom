@@ -88,12 +88,48 @@
       margin: 16px auto;
         text-align: center;
 }
+    .lang-switch {
+      display: inline-flex;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .lang-switch button {
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+    }
+    .lang-switch button.active {
+      background: #22c55e;
+      color: #0b1120;
+    }
   </style>
 </head>
 
   <body
     class="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white"
   ><main class="max-w-3xl mx-auto px-4 py-10">
+      <div class="flex items-center justify-between mb-4 gap-3">
+        <div class="lang-switch" role="tablist" aria-label="Language switcher">
+          <button type="button" data-lang="ko" class="active">KR</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <a
+          href="https://funnyfunny.cloud/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/15 border border-white/15 text-white rounded-lg font-medium transition-colors duration-200"
+          data-i18n="viewMore"
+        >
+          다른 서비스 보기
       <!-- Header -->
       <header class="text-center mb-8">
         <div
@@ -118,7 +154,7 @@
       >
         <div class="flex items-start justify-between gap-4">
           <div class="min-w-0">
-            <p class="text-sm text-white/60">오늘의 문장</p>
+            <p class="text-sm text-white/60" data-i18n="todayLabel">오늘의 문장</p>
             <p
               id="todayText"
               class="mt-2 text-xl md:text-2xl font-bold leading-relaxed"
@@ -131,7 +167,7 @@
               <span
                 class="text-xs px-2 py-1 rounded-full bg-white/5 text-white/60 border border-white/10"
               >
-                원문 인용 없이 재해석 문장
+                <span data-i18n="todayNote">원문 인용 없이 재해석 문장</span>
               </span>
             </div>
           </div>
@@ -170,26 +206,26 @@
                 <circle cx="19" cy="19" r="3"></circle>
                 <path d="M8.59 17.51 15.42 13M8.59 6.49l6.83 4.02"></path>
               </svg>
-              공유하기
+              <span data-i18n="shareButton">공유하기</span>
             </button>
             <p class="text-xs text-white/50 leading-snug">
-              공유 시 오늘의 문장과 서비스 링크, 출처가 함께 전달됩니다.
+              <span data-i18n="shareHint">공유 시 오늘의 문장과 서비스 링크, 출처가 함께 전달됩니다.</span>
             </p>
           </div>
         </div>
 
         <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3">
           <div class="rounded-xl bg-black/20 border border-white/10 p-4">
-            <p class="text-xs text-white/50">업데이트</p>
+            <p class="text-xs text-white/50" data-i18n="updateLabel">업데이트</p>
             <p id="todayDate" class="mt-1 font-semibold"></p>
           </div>
           <div class="rounded-xl bg-black/20 border border-white/10 p-4">
-            <p class="text-xs text-white/50">문장 수</p>
-            <p class="mt-1 font-semibold"><span id="countText"></span>개</p>
+            <p class="text-xs text-white/50" data-i18n="countLabel">문장 수</p>
+            <p class="mt-1 font-semibold"><span id="countText"></span><span data-i18n="countSuffix">개</span></p>
           </div>
           <div class="rounded-xl bg-black/20 border border-white/10 p-4">
-            <p class="text-xs text-white/50">랜덤 규칙</p>
-            <p class="mt-1 font-semibold">날짜 기반 고정</p>
+            <p class="text-xs text-white/50" data-i18n="ruleLabel">랜덤 규칙</p>
+            <p class="mt-1 font-semibold" data-i18n="ruleValue">날짜 기반 고정</p>
           </div>
         </div>
       </section>
@@ -198,22 +234,23 @@
       <section class="mt-8 rounded-2xl bg-white/5 border border-white/10 p-6">
         <div class="flex flex-col md:flex-row md:items-end gap-4">
           <label class="flex-1">
-            <span class="block text-sm text-white/70">검색</span>
+            <span class="block text-sm text-white/70" data-i18n="searchLabel">검색</span>
             <input
               id="q"
               type="text"
               placeholder="예: 불안, 용기, 관계, 감사..."
+              data-i18n-placeholder="searchPlaceholder"
               class="mt-2 w-full rounded-xl bg-black/20 border border-white/10 px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500/60 placeholder:text-white/40"
             />
           </label>
 
           <label class="md:w-56">
-            <span class="block text-sm text-white/70">테마</span>
+            <span class="block text-sm text-white/70" data-i18n="themeLabel">테마</span>
             <select
               id="theme"
               class="mt-2 w-full rounded-xl bg-black/20 border border-white/10 px-4 py-3 outline-none focus:ring-2 focus:ring-emerald-500/60"
             >
-              <option value="">전체</option>
+              <option value="" data-i18n="themeAll">전체</option>
             </select>
           </label>
 
@@ -222,27 +259,26 @@
               id="shuffleBtn"
               class="w-full md:w-auto px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold transition-colors"
             >
-              오늘 다시 뽑기
+              <span data-i18n="shuffleButton">오늘 다시 뽑기</span>
             </button>
             <button
               id="downloadBtn"
               class="w-full md:w-auto px-4 py-3 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold transition-colors"
             >
-              700개 TXT
+              <span data-i18n="downloadButton">700개 TXT</span>
             </button>
           </div>
         </div>
 
         <p class="mt-4 text-sm text-white/50">
-          ※ 이 서비스는 성경 번역문을 인용하지 않고, 메시지에서 영감을 받아 새로
-          작성한 문장만 제공합니다.
+          <span data-i18n="note">※ 이 서비스는 성경 번역문을 인용하지 않고, 메시지에서 영감을 받아 새로 작성한 문장만 제공합니다.</span>
         </p>
       </section>
 
       <!-- List -->
       <section class="mt-6">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-bold">문장 모음</h2>
+          <h2 class="text-lg font-bold" data-i18n="listTitle">문장 모음</h2>
           <div class="text-sm text-white/60">
             <span id="resultCount"></span>
           </div>
@@ -256,7 +292,7 @@
             id="prevBtn"
             class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:hover:bg-white/10 transition-colors"
           >
-            이전
+            <span data-i18n="prevButton">이전</span>
           </button>
           <div class="text-sm text-white/60">
             <span id="pageInfo"></span>
@@ -265,7 +301,7 @@
             id="nextBtn"
             class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 disabled:opacity-40 disabled:hover:bg-white/10 transition-colors"
           >
-            다음
+            <span data-i18n="nextButton">다음</span>
           </button>
         </div>
       </section>
@@ -477,14 +513,14 @@
         $("copyTodayBtn").onclick = async () => {
           const ok = await copyText(item.text);
           if (ok) {
-            $("copyTodayBtn").textContent = "복사됨";
+            $("copyTodayBtn").textContent = t("copyDone");
             setTimeout(() => {
               $("copyTodayBtn").innerHTML = `
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M8 4h10a2 2 0 0 1 2 2v10"></path>
                 <rect x="4" y="8" width="14" height="14" rx="2"></rect>
               </svg>
-              복사
+              ${t("copyButton")}
             `;
             }, 900);
           }
@@ -494,18 +530,18 @@
       async function shareToday() {
         if (!todayItem) return;
         const btn = $("shareTodayBtn");
-        const message = `${todayItem.text}\n\n오늘의 지혜에서 더 보기: https://wisdom.funnyfunny.cloud/\n출처: 오늘의 지혜`;
+        const message = `${todayItem.text}\n\n${t("shareMessage")}`;
         try {
           if (navigator.share) {
             await navigator.share({
-              title: "오늘의 지혜",
+              title: t("badgeTitle"),
               text: message,
               url: "https://wisdom.funnyfunny.cloud/",
             });
-            btn.textContent = "공유됨";
+            btn.textContent = t("shareDone");
           } else {
             await copyText(message);
-            btn.textContent = "링크 복사됨";
+            btn.textContent = t("linkCopied");
           }
         } catch (_) {
           await copyText(message);
@@ -567,8 +603,8 @@
           btn.addEventListener("click", async () => {
             const ok = await copyText(item.text);
             if (ok) {
-              btn.textContent = "복사됨";
-              setTimeout(() => (btn.textContent = "복사"), 900);
+              btn.textContent = t("copyDone");
+              setTimeout(() => (btn.textContent = t("copyButton")), 900);
             }
           });
 
@@ -579,8 +615,8 @@
         const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
         $("prevBtn").disabled = page <= 1;
         $("nextBtn").disabled = page >= totalPages;
-        $("pageInfo").textContent = `${page} / ${totalPages}`;
-        $("resultCount").textContent = `${filtered.length}개 결과`;
+        $("pageInfo").textContent = t("pageInfo", { page, total: totalPages });
+        $("resultCount").textContent = t("resultCount", { count: filtered.length });
       }
 
       function escapeHtml(str) {
@@ -604,6 +640,8 @@
       }
 
       // ---------- init ----------
+      setLang(detectLang(), { updateUrl: false });
+      
       $("year").textContent = new Date().getFullYear();
       $("countText").textContent = ALL.length;
 
