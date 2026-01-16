@@ -330,103 +330,207 @@
 
     <script>
       // ---------- 700 sentences generator (Korean, reinterpreted, not quotes) ----------
-      const THEMES = [
-        "평안",
-        "용기",
-        "사랑",
-        "관계",
-        "감사",
-        "인내",
-        "지혜",
-        "겸손",
-        "정직",
-        "회복",
-        "소망",
-        "절제",
-        "배려",
-        "용서",
-        "성실",
-        "집중",
-        "결단",
-        "불안 다루기",
-        "기쁨",
-        "성장",
-      ];
+      function getThemes() {
+        const isKo = currentLang === "ko";
+        return isKo ? [
+          "평안",
+          "용기",
+          "사랑",
+          "관계",
+          "감사",
+          "인내",
+          "지혜",
+          "겸손",
+          "정직",
+          "회복",
+          "소망",
+          "절제",
+          "배려",
+          "용서",
+          "성실",
+          "집중",
+          "결단",
+          "불안 다루기",
+          "기쁨",
+          "성장",
+        ] : [
+          "Peace",
+          "Courage",
+          "Love",
+          "Relationships",
+          "Gratitude",
+          "Patience",
+          "Wisdom",
+          "Humility",
+          "Honesty",
+          "Recovery",
+          "Hope",
+          "Restraint",
+          "Care",
+          "Forgiveness",
+          "Sincerity",
+          "Focus",
+          "Decision",
+          "Managing Anxiety",
+          "Joy",
+          "Growth",
+        ];
+      }
 
-      // "좋은 문장"의 톤을 만들기 위한 조각들(직접 인용/번역 금지: 문장 구조를 독립적으로 설계)
-      const OPENERS = [
-        "오늘은",
-        "때로는",
-        "가끔은",
-        "마음이 흔들릴수록",
-        "길이 보이지 않을수록",
-        "서두르고 싶을수록",
-        "불안이 커질수록",
-        "무너진 것 같을 때도",
-        "조용한 순간에",
-        "숨이 가쁠 때",
-        "선택이 어렵다면",
-        "관계가 멀게 느껴질 때",
-        "실패가 떠오를 때",
-        "눈앞이 어두울 때",
-        "마음이 복잡할 때",
-        "기다림이 길어질수록",
-        "나를 탓하고 싶어질 때",
-        "확신이 없을 때",
-      ];
+      function getOpeners() {
+        const isKo = currentLang === "ko";
+        return isKo ? [
+          "오늘은",
+          "때로는",
+          "가끔은",
+          "마음이 흔들릴수록",
+          "길이 보이지 않을수록",
+          "서두르고 싶을수록",
+          "불안이 커질수록",
+          "무너진 것 같을 때도",
+          "조용한 순간에",
+          "숨이 가쁠 때",
+          "선택이 어렵다면",
+          "관계가 멀게 느껴질 때",
+          "실패가 떠오를 때",
+          "눈앞이 어두울 때",
+          "마음이 복잡할 때",
+          "기다림이 길어질수록",
+          "나를 탓하고 싶어질 때",
+          "확신이 없을 때",
+        ] : [
+          "Today",
+          "Sometimes",
+          "Occasionally",
+          "When your heart wavers",
+          "When the path is unclear",
+          "When you want to rush",
+          "When anxiety grows",
+          "Even when it seems broken",
+          "In quiet moments",
+          "When breath is short",
+          "When choice is difficult",
+          "When relationships feel distant",
+          "When failure comes to mind",
+          "When the view is dark",
+          "When the heart is complex",
+          "The longer you wait",
+          "When you want to blame yourself",
+          "When there's no certainty",
+        ];
+      }
 
-      const CORES = [
-        "한 걸음만",
-        "작은 친절을",
-        "짧은 멈춤을",
-        "지금 할 수 있는 한 가지를",
-        "진심 한 마디를",
-        "고개를 들어",
-        "숨을 고르고",
-        "마음을 다잡고",
-        "시선을 바꾸어",
-        "기준을 다시 세워",
-        "조급함을 내려놓고",
-        "원망 대신",
-        "비교 대신",
-        "두려움 대신",
-        "핑계 대신",
-        "회피 대신",
-        "미움 대신",
-        "완벽 대신",
-      ];
+      function getCores() {
+        const isKo = currentLang === "ko";
+        return isKo ? [
+          "한 걸음만",
+          "작은 친절을",
+          "짧은 멈춤을",
+          "지금 할 수 있는 한 가지를",
+          "진심 한 마디를",
+          "고개를 들어",
+          "숨을 고르고",
+          "마음을 다잡고",
+          "시선을 바꾸어",
+          "기준을 다시 세워",
+          "조급함을 내려놓고",
+          "원망 대신",
+          "비교 대신",
+          "두려움 대신",
+          "핑계 대신",
+          "회피 대신",
+          "미움 대신",
+          "완벽 대신",
+        ] : [
+          "just one step",
+          "a small kindness",
+          "a brief pause",
+          "one thing you can do now",
+          "one sincere word",
+          "lift your head",
+          "calm your breath",
+          "steady your heart",
+          "change your perspective",
+          "reset your standards",
+          "let go of haste",
+          "instead of resentment",
+          "instead of comparison",
+          "instead of fear",
+          "instead of excuses",
+          "instead of avoidance",
+          "instead of hatred",
+          "instead of perfection",
+        ];
+      }
 
-      const ENDS = [
-        "선택해도 괜찮다.",
-        "해보면 길이 열린다.",
-        "하면 마음이 정돈된다.",
-        "하면 생각이 가벼워진다.",
-        "하면 내일이 달라진다.",
-        "하면 충분하다.",
-        "하는 것이 용기다.",
-        "하는 것이 사랑이다.",
-        "하면 다시 시작할 수 있다.",
-        "하면 방향이 선명해진다.",
-        "하면 관계가 따뜻해진다.",
-        "하면 불안이 줄어든다.",
-        "하면 오늘이 살아난다.",
-      ];
+      function getEnds() {
+        const isKo = currentLang === "ko";
+        return isKo ? [
+          "선택해도 괜찮다.",
+          "해보면 길이 열린다.",
+          "하면 마음이 정돈된다.",
+          "하면 생각이 가벼워진다.",
+          "하면 내일이 달라진다.",
+          "하면 충분하다.",
+          "하는 것이 용기다.",
+          "하는 것이 사랑이다.",
+          "하면 다시 시작할 수 있다.",
+          "하면 방향이 선명해진다.",
+          "하면 관계가 따뜻해진다.",
+          "하면 불안이 줄어든다.",
+          "하면 오늘이 살아난다.",
+        ] : [
+          "it's okay to choose.",
+          "trying opens the path.",
+          "it organizes your heart.",
+          "it lightens your thoughts.",
+          "it changes tomorrow.",
+          "it's enough.",
+          "that is courage.",
+          "that is love.",
+          "you can start again.",
+          "the direction becomes clear.",
+          "relationships become warm.",
+          "anxiety decreases.",
+          "today comes alive.",
+        ];
+      }
 
-      const LINES = [
-        "답은 빨리 오지 않아도, 길은 사라지지 않는다.",
-        "마음이 지칠 땐 속도를 줄이는 것도 전진이다.",
-        "말을 아끼는 날에도 마음은 자란다.",
-        "확신이 없어도 성실함은 길을 만든다.",
-        "지금의 작은 선택이 내일의 큰 평안을 부른다.",
-        "기다림은 멈춤이 아니라 방향을 지키는 일이다.",
-        "한 번의 친절이 하루의 온도를 바꾼다.",
-        "불안은 상상으로 커지지만, 행동으로 줄어든다.",
-        "관계는 ‘이기기’가 아니라 ‘이해하기’로 좋아진다.",
-        "감사는 상황보다 시선을 바꾸는 힘이다.",
-      ];
+      function getLines() {
+        const isKo = currentLang === "ko";
+        return isKo ? [
+          "답은 빨리 오지 않아도, 길은 사라지지 않는다.",
+          "마음이 지칠 땐 속도를 줄이는 것도 전진이다.",
+          "말을 아끼는 날에도 마음은 자란다.",
+          "확신이 없어도 성실함은 길을 만든다.",
+          "지금의 작은 선택이 내일의 큰 평안을 부른다.",
+          "기다림은 멈춤이 아니라 방향을 지키는 일이다.",
+          "한 번의 친절이 하루의 온도를 바꾼다.",
+          "불안은 상상으로 커지지만, 행동으로 줄어든다.",
+          "관계는 '이기기'가 아니라 '이해하기'로 좋아진다.",
+          "감사는 상황보다 시선을 바꾸는 힘이다.",
+        ] : [
+          "Even if answers don't come quickly, the path doesn't disappear.",
+          "When your heart is tired, slowing down is also progress.",
+          "Even on days you save words, your heart grows.",
+          "Even without certainty, sincerity creates a path.",
+          "Today's small choice brings tomorrow's great peace.",
+          "Waiting is not stopping, but keeping direction.",
+          "One act of kindness changes the day's temperature.",
+          "Anxiety grows through imagination, but decreases through action.",
+          "Relationships improve through 'understanding' not 'winning'.",
+          "Gratitude is the power to change perspective, not the situation.",
+        ];
+      }
 
       function makeSentence(i) {
         // deterministic variety
+        const THEMES = getThemes();
+        const OPENERS = getOpeners();
+        const CORES = getCores();
+        const ENDS = getEnds();
+        const LINES = getLines();
+        
         const t = THEMES[i % THEMES.length];
         const a = OPENERS[(i * 3) % OPENERS.length];
         const b = CORES[(i * 5 + 1) % CORES.length];
@@ -440,8 +544,8 @@
         };
       }
 
-      // Build ~700 items
-      const ALL = Array.from({ length: 700 }, (_, i) => makeSentence(i));
+      // Build ~700 items - will be regenerated when language changes
+      let ALL = Array.from({ length: 700 }, (_, i) => makeSentence(i));
 
       // ---------- UI helpers ----------
       const $ = (id) => document.getElementById(id);
@@ -497,6 +601,10 @@
         if (!sel) {
           console.warn("Theme select element not found");
           return;
+        }
+        // Clear existing options except first one
+        while (sel.children.length > 1) {
+          sel.removeChild(sel.lastChild);
         }
         const uniq = [...new Set(ALL.map((x) => x.theme))];
         uniq.forEach((t) => {
@@ -790,21 +898,49 @@
       function setLang(lang, options = {}) {
         const nextLang = translations[lang] ? lang : defaultLang;
         currentLang = nextLang;
+        window.currentLang = currentLang;
         document.documentElement.lang = nextLang;
         localStorage.setItem("preferredLang", nextLang);
         document.querySelectorAll(".lang-switch button").forEach((button) => {
           button.classList.toggle("active", button.dataset.lang === nextLang);
         });
+        
+        // Store current item ID before regenerating
+        const prevItemId = todayItem ? todayItem.id : null;
+        const prevTheme = $("theme")?.value || "";
+        
+        // Regenerate ALL array with new language
+        ALL = Array.from({ length: 700 }, (_, i) => makeSentence(i));
+        filtered = [...ALL];
+        
         applyTranslations();
+        renderThemes();
+        
+        // Restore theme filter if it existed
+        if (prevTheme) {
+          const themes = [...new Set(ALL.map((x) => x.theme))];
+          const matchingTheme = themes.find(t => t === prevTheme) || "";
+          if (matchingTheme && $("theme")) {
+            $("theme").value = matchingTheme;
+            applyFilter();
+          }
+        }
+        
+        // Update today section with new language
+        if (prevItemId && prevItemId <= ALL.length) {
+          const newItem = ALL[prevItemId - 1];
+          todayItem = newItem;
+          const todayTextEl = $("todayText");
+          const todayThemeEl = $("todayTheme");
+          if (todayTextEl) todayTextEl.textContent = newItem.text;
+          if (todayThemeEl) todayThemeEl.textContent = t("themePrefix") + newItem.theme;
+        }
+        
         // Re-render list to update translations (only if list element exists)
         if ($("list")) {
           renderList();
         }
-        // Update today section
-        if (todayItem) {
-          const todayThemeEl = $("todayTheme");
-          if (todayThemeEl) todayThemeEl.textContent = t("themePrefix") + todayItem.theme;
-        }
+        
         if (options.updateUrl) {
           const url = new URL(window.location.href);
           url.searchParams.set("lang", nextLang);
