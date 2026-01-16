@@ -810,28 +810,51 @@
       // ---------- init ----------
       setLang(detectLang(), { updateUrl: false });
       
-      $("year").textContent = new Date().getFullYear();
-      $("countText").textContent = ALL.length;
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+      
+      function init() {
+        const yearEl = $("year");
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+        
+        const countTextEl = $("countText");
+        if (countTextEl) countTextEl.textContent = ALL.length;
+        
+        renderThemes();
+        setToday(false);
+        applyFilter();
 
-      renderThemes();
-      setToday(false);
-      applyFilter();
+        const qEl = $("q");
+        if (qEl) qEl.addEventListener("input", applyFilter);
+        
+        const themeEl = $("theme");
+        if (themeEl) themeEl.addEventListener("change", applyFilter);
 
-      $("q").addEventListener("input", applyFilter);
-      $("theme").addEventListener("change", applyFilter);
-
-      $("prevBtn").addEventListener("click", () => {
-        page--;
-        renderList();
-      });
-      $("nextBtn").addEventListener("click", () => {
-        page++;
-        renderList();
-      });
-
-      $("shuffleBtn").addEventListener("click", () => setToday(true));
-      $("downloadBtn").addEventListener("click", downloadTxt);
-      $("shareTodayBtn").addEventListener("click", shareToday);
+        const prevBtn = $("prevBtn");
+        if (prevBtn) prevBtn.addEventListener("click", () => {
+          page--;
+          renderList();
+        });
+        
+        const nextBtn = $("nextBtn");
+        if (nextBtn) nextBtn.addEventListener("click", () => {
+          page++;
+          renderList();
+        });
+        
+        const shuffleBtn = $("shuffleBtn");
+        if (shuffleBtn) shuffleBtn.addEventListener("click", () => setToday(true));
+        
+        const downloadBtn = $("downloadBtn");
+        if (downloadBtn) downloadBtn.addEventListener("click", downloadTxt);
+        
+        const shareTodayBtn = $("shareTodayBtn");
+        if (shareTodayBtn) shareTodayBtn.addEventListener("click", shareToday);
+      }
     </script>
   
 <ins class="adsbygoogle"
