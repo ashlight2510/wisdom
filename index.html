@@ -486,10 +486,14 @@
       let page = 1;
       const pageSize = 20;
       let todayItem = null;
-      const shareBtnDefaultHtml = $("shareTodayBtn").innerHTML;
+      let shareBtnDefaultHtml = "";
 
       function renderThemes() {
         const sel = $("theme");
+        if (!sel) {
+          console.warn("Theme select element not found");
+          return;
+        }
         const uniq = [...new Set(ALL.map((x) => x.theme))];
         uniq.forEach((t) => {
           const opt = document.createElement("option");
@@ -823,6 +827,9 @@
         
         const countTextEl = $("countText");
         if (countTextEl) countTextEl.textContent = ALL.length;
+        
+        const shareTodayBtnEl = $("shareTodayBtn");
+        if (shareTodayBtnEl) shareBtnDefaultHtml = shareTodayBtnEl.innerHTML;
         
         renderThemes();
         setToday(false);
