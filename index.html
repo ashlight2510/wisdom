@@ -329,6 +329,11 @@
     </main>
 
     <script>
+      // ---------- Language setup (must be before sentence generation) ----------
+      const defaultLang = "ko";
+      const supportedLangs = ["ko", "en"];
+      let currentLang = defaultLang;
+      
       // ---------- 700 sentences generator (Korean, reinterpreted, not quotes) ----------
       function getThemes() {
         const isKo = currentLang === "ko";
