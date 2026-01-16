@@ -594,6 +594,10 @@
         }
       }
 
+      function formatCopyText(text) {
+        return `${text}\n\nhttps://wisdom.funnyfunny.cloud/`;
+      }
+
       // ---------- State ----------
       let filtered = [...ALL];
       let page = 1;
@@ -641,7 +645,7 @@
         const copyTodayBtnEl = $("copyTodayBtn");
         if (copyTodayBtnEl) {
           copyTodayBtnEl.onclick = async () => {
-            const ok = await copyText(item.text);
+            const ok = await copyText(formatCopyText(item.text));
             if (ok) {
               copyTodayBtnEl.textContent = t("copyDone");
               setTimeout(() => {
@@ -745,7 +749,7 @@
             // Update button text with current language
             btn.textContent = t("copyButton");
             btn.addEventListener("click", async () => {
-              const ok = await copyText(item.text);
+              const ok = await copyText(formatCopyText(item.text));
               if (ok) {
                 btn.textContent = t("copyDone");
                 setTimeout(() => (btn.textContent = t("copyButton")), 900);
