@@ -135,15 +135,15 @@
         <div
           class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10"
         >
-          <span class="text-emerald-300 text-sm font-semibold"
+          <span class="text-emerald-300 text-sm font-semibold" data-i18n="badgeTitle"
             >오늘의 지혜</span
           >
-          <span class="text-white/50 text-sm">Daily Wisdom</span>
+          <span class="text-white/50 text-sm" data-i18n="badgeSubtitle">Daily Wisdom</span>
         </div>
-        <h1 class="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight">
+        <h1 class="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="mainTitle">
           하루 한 문장
         </h1>
-        <p class="mt-2 text-white/70">
+        <p class="mt-2 text-white/70" data-i18n="mainSubtitle">
           성경의 메시지에서 영감을 받은 하루 한 문장
         </p>
       </header>
@@ -187,7 +187,7 @@
                 <path d="M8 4h10a2 2 0 0 1 2 2v10"></path>
                 <rect x="4" y="8" width="14" height="14" rx="2"></rect>
               </svg>
-              복사
+              <span data-i18n="copyButton">복사</span>
             </button>
             <button
               id="shareTodayBtn"
@@ -313,6 +313,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-medium transition-colors duration-200"
+          data-i18n="viewMore"
         >
           다른 서비스 보기
         </a>
@@ -507,7 +508,7 @@
 
         todayItem = item;
         $("todayText").textContent = item.text;
-        $("todayTheme").textContent = `테마: ${item.theme}`;
+        $("todayTheme").textContent = t("themePrefix") + item.theme;
         $("todayDate").textContent = formatDateK(now);
 
         $("copyTodayBtn").onclick = async () => {
@@ -545,7 +546,7 @@
           }
         } catch (_) {
           await copyText(message);
-          btn.textContent = "링크 복사됨";
+          btn.textContent = t("linkCopied");
         }
         setTimeout(() => {
           btn.innerHTML = shareBtnDefaultHtml;
@@ -571,6 +572,7 @@
         const items = filtered.slice(start, start + pageSize);
 
         const list = $("list");
+        if (!list) return; // Early return if element doesn't exist yet
         list.innerHTML = "";
 
         items.forEach((item) => {
@@ -593,7 +595,7 @@
                 item.text
               )}</p>
             </div>
-            <button class="copyBtn shrink-0 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-sm font-semibold transition-colors">
+            <button class="copyBtn shrink-0 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-sm font-semibold transition-colors" data-i18n="copyButton">
               복사
             </button>
           </div>
@@ -613,10 +615,14 @@
 
         // pagination
         const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-        $("prevBtn").disabled = page <= 1;
-        $("nextBtn").disabled = page >= totalPages;
-        $("pageInfo").textContent = t("pageInfo", { page, total: totalPages });
-        $("resultCount").textContent = t("resultCount", { count: filtered.length });
+        const prevBtn = $("prevBtn");
+        const nextBtn = $("nextBtn");
+        const pageInfo = $("pageInfo");
+        const resultCount = $("resultCount");
+        if (prevBtn) prevBtn.disabled = page <= 1;
+        if (nextBtn) nextBtn.disabled = page >= totalPages;
+        if (pageInfo) pageInfo.textContent = t("pageInfo", { page, total: totalPages });
+        if (resultCount) resultCount.textContent = t("resultCount", { count: filtered.length });
       }
 
       function escapeHtml(str) {
@@ -697,6 +703,10 @@
           resultCount: "{count} items",
           shareMessage: "Today's wisdom sentence - https://wisdom.funnyfunny.cloud/",
           badgeTitle: "Today's Wisdom",
+          badgeSubtitle: "Daily Wisdom",
+          mainTitle: "One sentence a day",
+          mainSubtitle: "One sentence a day inspired by biblical messages",
+          themePrefix: "Theme: ",
           shareDone: "Shared",
           linkCopied: "Link copied",
           viewMore: "View other services",
@@ -720,6 +730,18 @@
 
       function applyTranslations() {
         document.title = currentLang === "ko" ? "오늘의 지혜 한 문장" : "Daily Wisdom";
+        const desc = document.querySelector('meta[name="description"]');
+        if (desc) {
+          desc.setAttribute("content", currentLang === "ko" 
+            ? "성경의 메시지에서 영감을 받은 하루 한 문장. 짧고 단단한 문장으로 하루를 정돈하세요."
+            : "One sentence a day inspired by biblical messages. Organize your day with short and solid sentences.");
+        }
+        const keywords = document.querySelector('meta[name="keywords"]');
+        if (keywords) {
+          keywords.setAttribute("content", currentLang === "ko"
+            ? "오늘의 지혜, 하루 한 문장, 묵상, 마음정리, 영감 문장"
+            : "daily wisdom, one sentence a day, meditation, mind organization, inspirational sentences");
+        }
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           el.textContent = t(el.dataset.i18n);
         });
@@ -740,8 +762,14 @@
           button.classList.toggle("active", button.dataset.lang === nextLang);
         });
         applyTranslations();
-        // Re-render list to update translations
-        renderList();
+        // Re-render list to update translations (only if list element exists)
+        if ($("list")) {
+          renderList();
+        }
+        // Update today section
+        if (todayItem) {
+          $("todayTheme").textContent = t("themePrefix") + todayItem.theme;
+        }
         if (options.updateUrl) {
           const url = new URL(window.location.href);
           url.searchParams.set("lang", nextLang);
