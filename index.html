@@ -116,7 +116,8 @@
 
   <body
     class="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 text-white"
-  ><main class="max-w-3xl mx-auto px-4 py-10">
+  >
+    <main class="max-w-3xl mx-auto px-4 py-10">
       <div class="flex items-center justify-between mb-4 gap-3">
         <div class="lang-switch" role="tablist" aria-label="Language switcher">
           <button type="button" data-lang="ko" class="active">KR</button>
@@ -130,6 +131,9 @@
           data-i18n="viewMore"
         >
           다른 서비스 보기
+        </a>
+      </div>
+      
       <!-- Header -->
       <header class="text-center mb-8">
         <div
@@ -567,8 +571,17 @@
       }
 
       function applyFilter() {
-        const q = $("q").value.trim();
-        const th = $("theme").value;
+        const qEl = $("q");
+        const themeEl = $("theme");
+        
+        // Null 체크 추가
+        if (!qEl || !themeEl) {
+          console.warn("Filter elements not found");
+          return;
+        }
+        
+        const q = qEl.value.trim();
+        const th = themeEl.value;
 
         filtered = ALL.filter((item) => {
           const okTheme = !th || item.theme === th;
