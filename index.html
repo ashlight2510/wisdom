@@ -602,13 +602,17 @@
         `;
 
           const btn = card.querySelector(".copyBtn");
-          btn.addEventListener("click", async () => {
-            const ok = await copyText(item.text);
-            if (ok) {
-              btn.textContent = t("copyDone");
-              setTimeout(() => (btn.textContent = t("copyButton")), 900);
-            }
-          });
+          if (btn) {
+            // Update button text with current language
+            btn.textContent = t("copyButton");
+            btn.addEventListener("click", async () => {
+              const ok = await copyText(item.text);
+              if (ok) {
+                btn.textContent = t("copyDone");
+                setTimeout(() => (btn.textContent = t("copyButton")), 900);
+              }
+            });
+          }
 
           list.appendChild(card);
         });
