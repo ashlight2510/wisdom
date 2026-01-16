@@ -504,6 +504,7 @@
       }
 
       function setToday(forceRandom = false) {
+        if (!ALL.length) return;
         const now = new Date();
         const idx = forceRandom
           ? Math.floor(Math.random() * ALL.length)
@@ -511,16 +512,23 @@
         const item = ALL[idx];
 
         todayItem = item;
-        $("todayText").textContent = item.text;
-        $("todayTheme").textContent = t("themePrefix") + item.theme;
-        $("todayDate").textContent = formatDateK(now);
+        
+        const todayTextEl = $("todayText");
+        const todayThemeEl = $("todayTheme");
+        const todayDateEl = $("todayDate");
+        
+        if (todayTextEl) todayTextEl.textContent = item.text;
+        if (todayThemeEl) todayThemeEl.textContent = t("themePrefix") + item.theme;
+        if (todayDateEl) todayDateEl.textContent = formatDateK(now);
 
-        $("copyTodayBtn").onclick = async () => {
-          const ok = await copyText(item.text);
-          if (ok) {
-            $("copyTodayBtn").textContent = t("copyDone");
-            setTimeout(() => {
-              $("copyTodayBtn").innerHTML = `
+        const copyTodayBtnEl = $("copyTodayBtn");
+        if (copyTodayBtnEl) {
+          copyTodayBtnEl.onclick = async () => {
+            const ok = await copyText(item.text);
+            if (ok) {
+              copyTodayBtnEl.textContent = t("copyDone");
+              setTimeout(() => {
+                copyTodayBtnEl.innerHTML = `
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M8 4h10a2 2 0 0 1 2 2v10"></path>
                 <rect x="4" y="8" width="14" height="14" rx="2"></rect>
@@ -529,7 +537,8 @@
             `;
             }, 900);
           }
-        };
+          };
+        }
       }
 
       async function shareToday() {
@@ -780,7 +789,8 @@
         }
         // Update today section
         if (todayItem) {
-          $("todayTheme").textContent = t("themePrefix") + todayItem.theme;
+          const todayThemeEl = $("todayTheme");
+          if (todayThemeEl) todayThemeEl.textContent = t("themePrefix") + todayItem.theme;
         }
         if (options.updateUrl) {
           const url = new URL(window.location.href);
