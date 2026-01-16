@@ -860,9 +860,7 @@
         },
       };
 
-      const defaultLang = "ko";
-      const supportedLangs = ["ko", "en"];
-      let currentLang = defaultLang;
+      // defaultLang, supportedLangs, currentLang are already defined above
 
       function t(key, vars = {}) {
         const langTable = translations[currentLang] || translations.ko;
